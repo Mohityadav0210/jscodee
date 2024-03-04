@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="loginstyle.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="SignupContainer" class="form-container">
+            <form id="SignupForm">
+                <h2>Customer Sign up</h2>
+                <div class="form-group">
+                    <label for="SignupUsername">Username:</label>
+                    <input type="text" id="signupUsername" name="signupUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="NewPassword">New Password:</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="VerifyPassword">Verify New Password:</label>
+                    <input type="password" id="verifyPassword" name="verifyPassword" required>
+                </div>
+                <button type="submit">Sign up</button>
+            </form>
+            <p>Already have an account? <a href="login.html" id="showLoginForm">Login</a></p>
+            <p>Log in as Retailer? <a href="accounttype.html" id="showRetailerLoginForm">Retailer Login</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('SignupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Retrieve form inputs
+            var username = document.getElementById('signupUsername').value;
+            var password = document.getElementById('signupPassword').value;
+            var verifyPassword = document.getElementById('verifyPassword').value;
+
+            // Check if password and verify password match
+            if (password !== verifyPassword) {
+                alert('Password and verify password do not match.');
+                return;
+            }
+
+            // Retrieve existing data from local storage
+            var existingData = JSON.parse(localStorage.getItem('userData'));
+
+            // Ensure existingData is an array
+            if (!Array.isArray(existingData)) {
+                existingData = [];
+            }
+
+            // Check if the username already exists
+            var userExists = false;
+            if (existingData.length > 0) {
+                userExists = existingData.some(function(user) {
+                    return user.username === username;
+                });
+            }
+
+            // If the user already exists, display an alert and return
+            if (userExists) {
+                alert('Username already exists. Please choose a different one.');
+                return;
+            }
+
+            // Add the new user to the existing data
+            existingData.push({ username: username, password: password });
+
+            // Save updated data to local storage
+            localStorage.setItem('userData', JSON.stringify(existingData));
+
+            // Redirect to login page
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+
+</html>

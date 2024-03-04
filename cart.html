@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        /* CSS styles for cart display */
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <div id="cartItems">
+        <!-- Cart items will be dynamically generated here -->
+    </div>
+    <div id="totalPrice">
+        <!-- Total price will be displayed here -->
+    </div>
+    <div id="numItems">
+        <!-- Number of items will be displayed here -->
+    </div>
+    <script>
+        // Function to fetch JSON data from a server
+        function fetchCartData() {
+            // Replace this URL with your actual JSON data source
+            var url = 'path_to_your_json_data.json';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => updateCart(data))
+                .catch(error => console.error('Error fetching cart data:', error));
+        }
+
+        // Function to update cart with fetched JSON data
+        function updateCart(cartData) {
+            var cartItemsElement = document.getElementById("cartItems");
+            var totalPriceElement = document.getElementById("totalPrice");
+            var numItemsElement = document.getElementById("numItems");
+            var totalPrice = 0;
+
+            // Clear previous cart items
+            cartItemsElement.innerHTML = '';
+
+            // Update cart with new data
+            cartData.forEach(function(item) {
+                var itemElement = document.createElement("div");
+                itemElement.textContent = item.name + " - $" + item.price.toFixed(2);
+                cartItemsElement.appendChild(itemElement);
+                totalPrice += item.price;
+            });
+
+            // Update total price and number of items
+            totalPriceElement.textContent = "Total Price: $" + totalPrice.toFixed(2);
+            numItemsElement.textContent = "Number of Items: " + cartData.length;
+        }
+
+        // Fetch cart data when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchCartData();
+        });
+    </script>
+</body>
+</html>
